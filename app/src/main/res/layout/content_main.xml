@@ -5,9 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
+    tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <GridView
+        android:id="@+id/gvImages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:columnWidth="@dimen/width_column_images"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="16dp"
+        android:stretchMode="spacingWidthUniform">
 
 
+    </GridView>
 </android.support.constraint.ConstraintLayout>

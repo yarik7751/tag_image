@@ -1,5 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-
     <dimen name="height_btn">50dp</dimen>
+    <dimen name="width_column_images">122dp</dimen>
+    <dimen name="width_images">106dp</dimen>
 </resources>
