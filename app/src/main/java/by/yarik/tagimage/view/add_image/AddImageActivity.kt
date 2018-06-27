@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import by.yarik.tagimage.R
 import by.yarik.tagimage.presenter.Presenter
+import by.yarik.tagimage.util.AndroidUtils
 import by.yarik.tagimage.util.DialogUtils
 import by.yarik.tagimage.view.add_image.interfaces.AddImage
 import kotlinx.android.synthetic.main.activity_add_image.*
@@ -156,6 +157,8 @@ class AddImageActivity : AppCompatActivity(), AddImage {
 
     override fun addImage() {
         Toast.makeText(this, R.string.image_added_successfully, Toast.LENGTH_SHORT).show()
+        AndroidUtils.hideKeyboard(this)
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

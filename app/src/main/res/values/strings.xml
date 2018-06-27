@@ -11,4 +11,5 @@
     <string name="you_didnt_chose_image">You didn\'t chose image</string>
     <string name="image_added_successfully">Image added successfully</string>
     <string name="choose_image">Choose image</string>
+    <string name="there_arent_images">There aren\'t images</string>
 </resources>
