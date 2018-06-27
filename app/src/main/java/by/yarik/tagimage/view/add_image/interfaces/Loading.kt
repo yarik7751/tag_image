@@ -1,4 +1,4 @@
-package by.yarik.tagimage.view.add_image.innterface
+package by.yarik.tagimage.view.add_image.interfaces
 
 interface Loading {
 

@@ -1,11 +1,8 @@
 package by.yarik.tagimage.view.add_image
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.CursorLoader
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -16,9 +13,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import by.yarik.tagimage.R
+import by.yarik.tagimage.presenter.Presenter
 import by.yarik.tagimage.util.DialogUtils
-import by.yarik.tagimage.view.add_image.innterface.AddImage
-import com.squareup.picasso.Picasso
+import by.yarik.tagimage.view.add_image.interfaces.AddImage
 import kotlinx.android.synthetic.main.activity_add_image.*
 import java.io.File
 import java.io.FileOutputStream
@@ -30,10 +27,16 @@ class AddImageActivity : AppCompatActivity(), AddImage {
 
     var path: String? = ""
 
+    var mPresenter: Presenter? = null
+    var mAddImage: AddImage? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_image)
         setTitle(R.string.add_image_title)
+
+        mAddImage = this
+        mPresenter = Presenter(this, mAddImage as AddImageActivity)
 
         btnChooseImage.setOnClickListener {
             showGetPhotoDialog()
@@ -48,7 +51,7 @@ class AddImageActivity : AppCompatActivity(), AddImage {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add_iamge -> {
-
+                mPresenter!!.addImage(path, getTags())
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -137,7 +140,7 @@ class AddImageActivity : AppCompatActivity(), AddImage {
         startActivityForResult(Intent.createChooser(pickerIntent, getString(R.string.take_photo)), TAKE_PHOTO)
     }
 
-    fun openGallery() {
+    private fun openGallery() {
         var pickerIntent = Intent().apply {
             data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             action = Intent.ACTION_PICK
@@ -145,16 +148,23 @@ class AddImageActivity : AppCompatActivity(), AddImage {
         startActivityForResult(Intent.createChooser(pickerIntent, getString(R.string.select_images)), GALLERY_PICK)
     }
 
+    private fun getTags(): List<String> {
+        var tagsStr = etTags.text.toString()
+        var tags = tagsStr.split(",")
+        return tags
+    }
+
     override fun addImage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, R.string.image_added_successfully, Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     override fun showImageError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, R.string.you_didnt_chose_image, Toast.LENGTH_SHORT).show()
     }
 
     override fun showEmptyTagsError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, R.string.you_should_enter_tags, Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoadingDialog() {
