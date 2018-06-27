@@ -1,4 +1,4 @@
-package by.yarik.tagimage.adapter
+package by.yarik.tagimage.view.add_image.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
