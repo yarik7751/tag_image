@@ -20,12 +20,8 @@ import com.jakewharton.rxbinding.widget.RxTextView
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
-import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
-import rx.functions.Action0
 import rx.functions.Action1
-import rx.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), Main {
 
