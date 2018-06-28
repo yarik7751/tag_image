@@ -13,7 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import by.yarik.tagimage.R
-import by.yarik.tagimage.presenter.Presenter
+import by.yarik.tagimage.presenter.AddImagePresenter
 import by.yarik.tagimage.util.AndroidUtils
 import by.yarik.tagimage.util.DialogUtils
 import by.yarik.tagimage.view.add_image.interfaces.AddImage
@@ -28,7 +28,7 @@ class AddImageActivity : AppCompatActivity(), AddImage {
 
     var path: String? = ""
 
-    var mPresenter: Presenter? = null
+    var mAddImagePresenter: AddImagePresenter? = null
     var mAddImage: AddImage? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class AddImageActivity : AppCompatActivity(), AddImage {
         setTitle(R.string.add_image_title)
 
         mAddImage = this
-        mPresenter = Presenter(this, mAddImage as AddImageActivity)
+        mAddImagePresenter = AddImagePresenter(this, mAddImage as AddImageActivity)
 
         btnChooseImage.setOnClickListener {
             showGetPhotoDialog()
@@ -52,7 +52,7 @@ class AddImageActivity : AppCompatActivity(), AddImage {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add_iamge -> {
-                mPresenter!!.addImage(path, getTags())
+                mAddImagePresenter!!.addImage(path, getTags())
                 true
             }
             else -> super.onOptionsItemSelected(item)

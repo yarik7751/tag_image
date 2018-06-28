@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import by.yarik.tagimage.R
 import by.yarik.tagimage.db.model.Image
@@ -15,29 +16,40 @@ import by.yarik.tagimage.util.AndroidUtils
 import by.yarik.tagimage.view.main.adapter.ImageAdapter
 import by.yarik.tagimage.view.add_image.AddImageActivity
 import by.yarik.tagimage.view.main.interfaces.Main
+import com.jakewharton.rxbinding.widget.RxTextView
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import rx.Subscription
+import rx.android.schedulers.AndroidSchedulers
+import rx.functions.Action0
+import rx.functions.Action1
+import rx.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), Main {
 
     private val RECORD_REQUEST_CODE = 101
     private val ADD_IMAGE_ACTIVITY = 41
 
-    var mainPresenter: MainPresenter? = null
-    var main: Main? = null
+    var mMainPresenter: MainPresenter? = null
+    var mMain: Main? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        main = this
-        mainPresenter = MainPresenter(this, main as MainActivity)
-        mainPresenter!!.getAllImages()
+        initPresenter()
 
         etQuery.visibility = View.GONE
 
+        RxTextView.textChanges(etQuery)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(Action1 {
+                    Log.d("MainActivity_log", it.toString())
+                    mMainPresenter!!.getImagesByQuery(it.toString())
+                })
         fab.setOnClickListener { view ->
             ActivityCompat.requestPermissions(
                     this,
@@ -48,6 +60,12 @@ class MainActivity : AppCompatActivity(), Main {
         imgSearch.setOnClickListener {
             searchButtonClick()
         }
+    }
+
+    private fun initPresenter() {
+        mMain = this
+        mMainPresenter = MainPresenter(this, mMain as MainActivity)
+        mMainPresenter!!.getAllImages()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -64,7 +82,15 @@ class MainActivity : AppCompatActivity(), Main {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK) {
-            mainPresenter!!.getAllImages()
+            mMainPresenter!!.getAllImages()
+        }
+    }
+
+    override fun onBackPressed() {
+        if(etQuery.visibility == View.VISIBLE) {
+            hideSearchField()
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -91,25 +117,21 @@ class MainActivity : AppCompatActivity(), Main {
         AndroidUtils.hideKeyboard(this)
     }
 
-    override fun setAllImages(images: List<Image>) {
+    private fun loadImages(images: List<Image>) {
         if(images.size == 0) {
             tvNoImages.visibility = View.VISIBLE
         } else {
             tvNoImages.visibility = View.INVISIBLE
         }
-        var imageAdapter = ImageAdapter(this, images);
-        gvImages.adapter = imageAdapter;
+        var imageAdapter = ImageAdapter(this, images)
+        gvImages.adapter = imageAdapter
     }
 
-    override fun onBackPressed() {
-        if(etQuery.visibility == View.VISIBLE) {
-            hideSearchField()
-        } else {
-            super.onBackPressed()
-        }
+    override fun setAllImages(images: List<Image>) {
+        loadImages(images)
     }
 
-    override fun setImagesByQuery(q: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun setImagesByQuery(images: List<Image>) {
+        loadImages(images)
     }
 }

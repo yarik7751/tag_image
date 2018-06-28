@@ -6,7 +6,7 @@ import by.yarik.tagimage.db.model.Image
 import by.yarik.tagimage.view.add_image.interfaces.AddImage
 import by.yarik.tagimage.view.main.interfaces.Main
 
-class Presenter(var context: Context, var addImage: AddImage) {
+class AddImagePresenter(var context: Context, var addImage: AddImage) {
 
     var dbHelper: DBHelper? = null
     init {

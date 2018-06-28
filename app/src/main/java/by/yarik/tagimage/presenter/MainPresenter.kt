@@ -16,4 +16,16 @@ class MainPresenter(var context: Context, var main: Main) {
         var images = dbHelper!!.imageDao.queryForAll()
         main.setAllImages(images)
     }
+
+    fun getImagesByQuery(q: String) {
+        var images: List<Image>
+        if(q.isEmpty()) {
+            images = dbHelper!!.imageDao.queryForAll()
+        } else {
+            var queryBuilder = dbHelper!!.imageDao.queryBuilder();
+            queryBuilder.where().like("tags", "%$q%")
+            images = dbHelper!!.imageDao.query(queryBuilder.prepare())
+        }
+        main.setImagesByQuery(images)
+    }
 }

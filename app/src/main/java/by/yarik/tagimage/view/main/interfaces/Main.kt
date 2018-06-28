@@ -4,5 +4,5 @@ import by.yarik.tagimage.db.model.Image
 
 interface Main {
     fun setAllImages(images: List<Image>)
-    fun setImagesByQuery(q: String)
+    fun setImagesByQuery(images: List<Image>)
 }
