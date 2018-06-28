@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import by.yarik.tagimage.R
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity(), Main {
         when(requestCode) {
             RECORD_REQUEST_CODE -> {
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    hideSearchField()
                     startActivityForResult(Intent(this, AddImageActivity::class.java), ADD_IMAGE_ACTIVITY )
                 }
             }
@@ -107,6 +109,7 @@ class MainActivity : AppCompatActivity(), Main {
     }
 
     private fun hideSearchField() {
+        etQuery.setText("")
         imgSearch.setImageResource(R.drawable.baseline_search_white_36)
         etQuery.visibility = View.GONE
         tvTitle.visibility = View.VISIBLE
