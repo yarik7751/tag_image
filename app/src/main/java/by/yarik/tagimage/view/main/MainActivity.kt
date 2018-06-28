@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity(), Main {
         fab.setOnClickListener { view ->
             ActivityCompat.requestPermissions(
                     this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    arrayOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA),
                     RECORD_REQUEST_CODE)
         }
 
